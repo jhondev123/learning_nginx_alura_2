@@ -1,0 +1,30 @@
+services:
+  nginx:
+    image: nginx:latest
+    ports:
+      - "80:80"
+      - "8080:8080"
+      - "8000:8000"
+      - "8003:8003"
+
+    volumes:
+      - ./nginx.conf:/etc/nginx/nginx.conf
+      - ./servers.conf:/etc/nginx/servers.conf
+      - ./load_balancer.conf:/etc/nginx/load_balancer.conf
+      - ./logs:/etc/nginx/logs
+
+      - ./index.html:/var/www/html/index.html
+      - ./erro.html:/var/www/html/erro.html
+    networks:
+      - app
+
+  php:
+    image: php:fpm
+    volumes:
+      - ./php/index.php:/var/www/html/index.php
+    networks:
+      - app
+
+networks:
+  app:
+    driver: bridge
